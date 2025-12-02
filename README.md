@@ -1,4 +1,4 @@
-﻿# project-interface
+﻿# reservation-seat-service
 
 ## 개요
 이 문서는 [project-interface](https://github.com/tickatch/project-interface) 프로젝트를 기반으로 새로운 서비스 프로젝트를 생성하는 방법을 안내합니다.  
@@ -24,12 +24,12 @@ cd {새로운-서비스-레포}
 // 본 예시에서는 이해를 돕기 위해 새로운 패키지명을 ticketservice 로 사용하였습니다.
 // 실제 사용 시에는 새로운 프로젝트의 패키지명을 사용해주시기 바랍니다.
 mv src/main/java/com/tickatch/projectinterface src/main/java/com/tickatch/ticketservice
-find src/main/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/package com.tickatch.projectinterface/package com.tickatch.ticketservice/g'
-find src/main/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/import com.tickatch.projectinterface/import com.tickatch.ticketservice/g'
+find src/main/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/package com.tickatch.reservationseatservice/package com.tickatch.ticketservice/g'
+find src/main/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/import com.tickatch.reservationseatservice/import com.tickatch.ticketservice/g'
 
 mv src/test/java/com/tickatch/projectinterface src/test/java/com/tickatch/ticketservice
-find src/test/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/package com.tickatch.projectinterface/package com.tickatch.ticketservice/g'
-find src/test/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/import com.tickatch.projectinterface/import com.tickatch.ticketservice/g'
+find src/test/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/package com.tickatch.reservationseatservice/package com.tickatch.ticketservice/g'
+find src/test/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/import com.tickatch.reservationseatservice/import com.tickatch.ticketservice/g'
 ```
 
 4. IDE로 어플리케이션 진입점, 각종 환경변수 등을 수정합니다. 필수 수정 항목은 다음과 같습니다.
@@ -68,12 +68,12 @@ cd <새로운-서비스-레포>
 // 본 예시에서는 이해를 돕기 위해 새로운 패키지명을 ticketservice 로 사용하였습니다.
 // 실제 사용 시에는 새로운 프로젝트의 패키지명을 사용해주시기 바랍니다.
 mv src/main/java/com/tickatch/projectinterface src/main/java/com/tickatch/ticketservice
-find src/main/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/package com.tickatch.projectinterface/package com.tickatch.ticketservice/g'
-find src/main/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/import com.tickatch.projectinterface/import com.tickatch.ticketservice/g'
+find src/main/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/package com.tickatch.reservationseatservice/package com.tickatch.ticketservice/g'
+find src/main/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/import com.tickatch.reservationseatservice/import com.tickatch.ticketservice/g'
 
 mv src/test/java/com/tickatch/projectinterface src/test/java/com/tickatch/ticketservice
-find src/test/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/package com.tickatch.projectinterface/package com.tickatch.ticketservice/g'
-find src/test/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/import com.tickatch.projectinterface/import com.tickatch.ticketservice/g'
+find src/test/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/package com.tickatch.reservationseatservice/package com.tickatch.ticketservice/g'
+find src/test/java/com/tickatch/ticketservice -type f -name "*.java" | xargs sed -i '' 's/import com.tickatch.reservationseatservice/import com.tickatch.ticketservice/g'
 ```
 
 5. IDE로 어플리케이션 진입점, 각종 환경변수 등을 수정합니다. 필수 수정 항목은 다음과 같습니다.
