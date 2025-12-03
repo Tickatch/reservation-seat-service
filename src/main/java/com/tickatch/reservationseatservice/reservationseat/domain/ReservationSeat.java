@@ -47,6 +47,12 @@ public class ReservationSeat extends AbstractTimeEntity {
     return reservationSeat;
   }
 
+  public void updateSeatInfo(SeatInfoUpdateRequest updateRequest) {
+    this.seatInfo =
+        SeatInfo.of(
+            this.seatInfo.getSeatNumber(), updateRequest.grade(), Price.of(updateRequest.price()));
+  }
+
   public void preempt() {
     checkAvailability();
 
@@ -61,6 +67,10 @@ public class ReservationSeat extends AbstractTimeEntity {
 
   public void cancel() {
     this.status = ReservationSeatStatus.AVAILABLE;
+  }
+
+  public boolean isReservable() {
+    return status.isAvaliable();
   }
 
   public ReservationSeatId getId() {

@@ -33,6 +33,16 @@ class ReservationSeatTest {
   }
 
   @Test
+  void updateSeatInfo() {
+    SeatInfoUpdateRequest request = new SeatInfoUpdateRequest("A석", 8000L);
+
+    seat.updateSeatInfo(request);
+
+    assertThat(seat.getSeatInfo().getGrade()).isEqualTo("A석");
+    assertThat(seat.getSeatInfo().getPrice()).isEqualTo(Price.of(8000L));
+  }
+
+  @Test
   void preempt() {
     seat.preempt();
 
@@ -65,5 +75,16 @@ class ReservationSeatTest {
     seat.cancel();
 
     assertThat(seat.getStatus()).isEqualTo(ReservationSeatStatus.AVAILABLE);
+  }
+
+  @Test
+  void isReservable() {
+    assertThat(seat.isReservable()).isTrue();
+
+    seat.reserve();
+    assertThat(seat.isReservable()).isFalse();
+
+    seat.cancel();
+    assertThat(seat.isReservable()).isTrue();
   }
 }
