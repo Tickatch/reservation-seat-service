@@ -1,5 +1,6 @@
 package com.tickatch.reservationseatservice.reservationseat.domain;
 
+import static com.tickatch.reservationseatservice.reservationseat.ReservationSeatFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -9,7 +10,6 @@ import com.tickatch.reservationseatservice.reservationseat.domain.exception.Rese
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.Price;
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.ProductId;
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.SeatInfo;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,16 +19,14 @@ class ReservationSeatTest {
 
   @BeforeEach
   void setUp() {
-    ReservationSeatCreateRequest request =
-        new ReservationSeatCreateRequest(UUID.randomUUID(), "A1", "S석", 10000L);
+    ReservationSeatCreateRequest request = createReservationSeatCreateRequest();
 
     seat = ReservationSeat.create(request);
   }
 
   @Test
   void create() {
-    ReservationSeatCreateRequest request =
-        new ReservationSeatCreateRequest(UUID.randomUUID(), "A1", "S석", 10000L);
+    ReservationSeatCreateRequest request = createReservationSeatCreateRequest();
 
     ReservationSeat seat = ReservationSeat.create(request);
 
