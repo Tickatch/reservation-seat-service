@@ -1,4 +1,4 @@
-package com.tickatch.reservationseatservice.reservationseat.domain;
+package com.tickatch.reservationseatservice.reservationseat.domain.vo;
 
 import static org.springframework.util.Assert.*;
 

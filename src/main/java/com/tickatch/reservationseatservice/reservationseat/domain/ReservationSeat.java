@@ -1,6 +1,14 @@
 package com.tickatch.reservationseatservice.reservationseat.domain;
 
 import com.tickatch.reservationseatservice.global.domain.AbstractTimeEntity;
+import com.tickatch.reservationseatservice.reservationseat.domain.dto.ReservationSeatCreateRequest;
+import com.tickatch.reservationseatservice.reservationseat.domain.dto.SeatInfoUpdateRequest;
+import com.tickatch.reservationseatservice.reservationseat.domain.exception.ReservationSeatErrorCode;
+import com.tickatch.reservationseatservice.reservationseat.domain.exception.ReservationSeatException;
+import com.tickatch.reservationseatservice.reservationseat.domain.vo.Price;
+import com.tickatch.reservationseatservice.reservationseat.domain.vo.ProductId;
+import com.tickatch.reservationseatservice.reservationseat.domain.vo.ReservationSeatId;
+import com.tickatch.reservationseatservice.reservationseat.domain.vo.SeatInfo;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

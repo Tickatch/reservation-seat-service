@@ -3,6 +3,8 @@ package com.tickatch.reservationseatservice.reservationseat.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.tickatch.reservationseatservice.reservationseat.domain.vo.Price;
+import com.tickatch.reservationseatservice.reservationseat.domain.vo.SeatInfo;
 import org.junit.jupiter.api.Test;
 
 class SeatInfoTest {

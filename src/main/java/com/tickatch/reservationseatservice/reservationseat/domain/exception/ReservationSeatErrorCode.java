@@ -1,4 +1,4 @@
-package com.tickatch.reservationseatservice.reservationseat.domain;
+package com.tickatch.reservationseatservice.reservationseat.domain.exception;
 
 import io.github.tickatch.common.error.ErrorCode;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.tickatch.reservationseatservice.reservationseat.domain;
+package com.tickatch.reservationseatservice.reservationseat.domain.vo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

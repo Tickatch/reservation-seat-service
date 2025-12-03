@@ -3,6 +3,12 @@ package com.tickatch.reservationseatservice.reservationseat.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.tickatch.reservationseatservice.reservationseat.domain.dto.ReservationSeatCreateRequest;
+import com.tickatch.reservationseatservice.reservationseat.domain.dto.SeatInfoUpdateRequest;
+import com.tickatch.reservationseatservice.reservationseat.domain.exception.ReservationSeatException;
+import com.tickatch.reservationseatservice.reservationseat.domain.vo.Price;
+import com.tickatch.reservationseatservice.reservationseat.domain.vo.ProductId;
+import com.tickatch.reservationseatservice.reservationseat.domain.vo.SeatInfo;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
