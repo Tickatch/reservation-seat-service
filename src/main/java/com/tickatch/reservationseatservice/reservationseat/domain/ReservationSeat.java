@@ -35,6 +35,18 @@ public class ReservationSeat extends AbstractTimeEntity {
   @Enumerated(EnumType.STRING)
   private ReservationSeatStatus status;
 
+  public static ReservationSeat create(ReservationSeatCreateRequest createRequest) {
+    ReservationSeat reservationSeat = new ReservationSeat();
+
+    reservationSeat.productId = ProductId.of(createRequest.productId());
+    reservationSeat.seatInfo =
+        SeatInfo.of(
+            createRequest.seatNumber(), createRequest.grade(), Price.of(createRequest.price()));
+    reservationSeat.status = ReservationSeatStatus.AVAILABLE;
+
+    return reservationSeat;
+  }
+
   public ReservationSeatId getId() {
     return ReservationSeatId.of(this.id);
   }
