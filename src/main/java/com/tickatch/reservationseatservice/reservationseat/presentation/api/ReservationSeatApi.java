@@ -1,9 +1,9 @@
-package com.tickatch.reservationseatservice.reservationseat.presentation;
+package com.tickatch.reservationseatservice.reservationseat.presentation.api;
 
 import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatCreator;
 import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatsCreateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
-import com.tickatch.reservationseatservice.reservationseat.presentation.dto.ReservationSeatResponse;
+import com.tickatch.reservationseatservice.reservationseat.presentation.api.dto.ReservationSeatResponse;
 import io.github.tickatch.common.api.ApiResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
