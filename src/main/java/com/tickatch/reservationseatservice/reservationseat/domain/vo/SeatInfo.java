@@ -1,6 +1,7 @@
 package com.tickatch.reservationseatservice.reservationseat.domain.vo;
 
-import static org.springframework.util.Assert.*;
+import static org.springframework.util.Assert.hasText;
+import static org.springframework.util.Assert.notNull;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
