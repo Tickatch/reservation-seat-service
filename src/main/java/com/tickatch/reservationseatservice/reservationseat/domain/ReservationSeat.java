@@ -1,7 +1,6 @@
 package com.tickatch.reservationseatservice.reservationseat.domain;
 
 import com.tickatch.reservationseatservice.global.domain.AbstractTimeEntity;
-import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,15 +28,9 @@ public class ReservationSeat extends AbstractTimeEntity {
   @Getter(AccessLevel.NONE)
   private Long id;
 
-  @Column(nullable = false)
-  private String seatNumber;
-
   @Embedded private ProductId productId;
 
-  @Column(nullable = false)
-  private String grade;
-
-  @Embedded private Price price;
+  @Embedded private SeatInfo seatInfo;
 
   @Enumerated(EnumType.STRING)
   private ReservationSeatStatus status;
