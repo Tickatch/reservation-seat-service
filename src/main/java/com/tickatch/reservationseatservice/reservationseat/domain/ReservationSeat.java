@@ -7,7 +7,6 @@ import com.tickatch.reservationseatservice.reservationseat.domain.exception.Rese
 import com.tickatch.reservationseatservice.reservationseat.domain.exception.ReservationSeatException;
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.Price;
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.ProductId;
-import com.tickatch.reservationseatservice.reservationseat.domain.vo.ReservationSeatId;
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.SeatInfo;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -33,7 +32,6 @@ public class ReservationSeat extends AbstractTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Getter(AccessLevel.NONE)
   private Long id;
 
   @Embedded private ProductId productId;
@@ -79,10 +77,6 @@ public class ReservationSeat extends AbstractTimeEntity {
 
   public boolean isReservable() {
     return status.isAvaliable();
-  }
-
-  public ReservationSeatId getId() {
-    return ReservationSeatId.of(this.id);
   }
 
   private void checkAvailability() {
