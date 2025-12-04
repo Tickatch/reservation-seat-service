@@ -22,4 +22,6 @@ public interface ReservationSeatRepository extends Repository<ReservationSeat, L
   Optional<ReservationSeat> findByIdWithLock(Long id);
 
   List<ReservationSeat> findAllByProductId(ProductId productId);
+
+  void deleteAllByProductId(ProductId productId);
 }

@@ -3,6 +3,7 @@ package com.tickatch.reservationseatservice.reservationseat.application.service;
 import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatInfosUpdateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeatRepository;
+import com.tickatch.reservationseatservice.reservationseat.domain.vo.ProductId;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -65,5 +66,10 @@ public class ReservationSeatManageService implements ReservationSeatManager {
     reservationSeat.cancel();
 
     reservationSeatRepository.save(reservationSeat);
+  }
+
+  @Override
+  public void delete(Long productId) {
+    reservationSeatRepository.deleteAllByProductId(ProductId.of(productId));
   }
 }
