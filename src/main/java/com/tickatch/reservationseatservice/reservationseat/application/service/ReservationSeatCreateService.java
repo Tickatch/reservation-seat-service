@@ -9,6 +9,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 예매 좌석 생성 서비스.
+ *
+ * <p>예매 좌석 생성 요청을 처리하여 다수의 예매 좌석을 등록하는 서비스 구현체이다.
+ *
+ * @author 김형섭
+ * @since 1.0.0
+ */
 @Transactional
 @RequiredArgsConstructor
 @Service
