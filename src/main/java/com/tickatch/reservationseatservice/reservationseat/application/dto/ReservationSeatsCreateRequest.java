@@ -1,4 +1,4 @@
-package com.tickatch.reservationseatservice.reservationseat.application.service.dto;
+package com.tickatch.reservationseatservice.reservationseat.application.dto;
 
 import com.tickatch.reservationseatservice.reservationseat.domain.dto.ReservationSeatCreateRequest;
 import jakarta.validation.constraints.NotNull;

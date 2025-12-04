@@ -15,10 +15,10 @@ import com.tickatch.reservationseatservice.reservationseat.ReservationSeatFixtur
 import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatCreator;
 import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatFinder;
 import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatManager;
-import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatInfosUpdateRequest;
-import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatsCreateRequest;
+import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfosUpdateRequest;
+import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatsCreateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
-import com.tickatch.reservationseatservice.reservationseat.presentation.api.dto.ReservationSeatResponse;
+import com.tickatch.reservationseatservice.reservationseat.presentation.dto.ReservationSeatResponse;
 import io.github.tickatch.common.security.test.MockUser;
 import java.util.List;
 import org.junit.jupiter.api.Test;

@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.tickatch.reservationseatservice.PersistenceTest;
 import com.tickatch.reservationseatservice.reservationseat.ReservationSeatFixture;
-import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatInfoUpdateRequest;
-import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatInfosUpdateRequest;
+import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfoUpdateRequest;
+import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfosUpdateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeatRepository;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeatStatus;

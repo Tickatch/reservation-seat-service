@@ -1,4 +1,4 @@
-package com.tickatch.reservationseatservice.reservationseat.application.service.dto;
+package com.tickatch.reservationseatservice.reservationseat.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.Valid;

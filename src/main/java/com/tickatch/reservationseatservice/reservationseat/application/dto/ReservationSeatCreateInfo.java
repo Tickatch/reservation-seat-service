@@ -1,4 +1,4 @@
-package com.tickatch.reservationseatservice.reservationseat.application.service.dto;
+package com.tickatch.reservationseatservice.reservationseat.application.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

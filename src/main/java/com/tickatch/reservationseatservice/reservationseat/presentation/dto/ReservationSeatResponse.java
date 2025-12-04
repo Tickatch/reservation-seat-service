@@ -1,4 +1,4 @@
-package com.tickatch.reservationseatservice.reservationseat.presentation.api.dto;
+package com.tickatch.reservationseatservice.reservationseat.presentation.dto;
 
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.SeatInfo;

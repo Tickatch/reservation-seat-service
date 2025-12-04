@@ -1,6 +1,6 @@
 package com.tickatch.reservationseatservice.reservationseat.application.service;
 
-import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatInfosUpdateRequest;
+import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfosUpdateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeatRepository;
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.ProductId;
