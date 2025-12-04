@@ -8,6 +8,7 @@ import com.tickatch.reservationseatservice.reservationseat.application.service.d
 import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatInfosUpdateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeatRepository;
+import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeatStatus;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,7 @@ class ReservationSeatManagerTest {
   @Autowired ReservationSeatManager reservationSeatManager;
   @Autowired ReservationSeatRepository reservationSeatRepository;
   @Autowired ReservationSeatCreator reservationSeatCreator;
+  @Autowired ReservationSeatFinder reservationSeatFinder;
   @Autowired EntityManager em;
 
   private List<ReservationSeat> reservationSeats;
@@ -70,6 +72,43 @@ class ReservationSeatManagerTest {
     assertThat(updatedThirdSeat.getSeatInfo().getPrice().value()).isEqualTo(8000L);
     assertThat(updatedThirdSeat.getSeatInfo().getSeatNumber())
         .isEqualTo(thirdSeat.getSeatInfo().getSeatNumber());
+  }
+
+  @Test
+  void preempt() {
+    ReservationSeat reservationSeat = reservationSeats.getFirst();
+
+    reservationSeatManager.preempt(reservationSeat.getId());
+    em.flush();
+    em.clear();
+
+    ReservationSeat result = reservationSeatFinder.findById(reservationSeat.getId());
+    assertThat(result.getStatus()).isEqualTo(ReservationSeatStatus.PREEMPT);
+  }
+
+  @Test
+  void reserve() {
+    ReservationSeat reservationSeat = reservationSeats.getFirst();
+
+    reservationSeatManager.reserve(reservationSeat.getId());
+    em.flush();
+    em.clear();
+
+    ReservationSeat result = reservationSeatFinder.findById(reservationSeat.getId());
+    assertThat(result.getStatus()).isEqualTo(ReservationSeatStatus.RESERVED);
+  }
+
+  @Test
+  void cancel() {
+    ReservationSeat reservationSeat = reservationSeats.getFirst();
+    reservationSeatManager.preempt(reservationSeat.getId());
+
+    reservationSeatManager.cancel(reservationSeat.getId());
+    em.flush();
+    em.clear();
+
+    ReservationSeat result = reservationSeatFinder.findById(reservationSeat.getId());
+    assertThat(result.getStatus()).isEqualTo(ReservationSeatStatus.AVAILABLE);
   }
 
   private List<ReservationSeat> createReservationSeats() {

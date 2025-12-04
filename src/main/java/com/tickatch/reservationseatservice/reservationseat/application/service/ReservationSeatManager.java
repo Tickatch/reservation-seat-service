@@ -5,4 +5,10 @@ import jakarta.validation.Valid;
 
 public interface ReservationSeatManager {
   void updateReservationSeatInfo(@Valid ReservationSeatInfosUpdateRequest updateRequest);
+
+  void preempt(@Valid Long reservationSeatId);
+
+  void reserve(@Valid Long reservationSeatId);
+
+  void cancel(@Valid Long reservationSeatId);
 }
