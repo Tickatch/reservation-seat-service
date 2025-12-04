@@ -8,6 +8,7 @@ import com.tickatch.reservationseatservice.reservationseat.application.dto.Reser
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import com.tickatch.reservationseatservice.reservationseat.presentation.dto.ReservationSeatResponse;
 import io.github.tickatch.common.api.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +42,7 @@ public class ReservationSeatApi {
    * @param createRequest 예매 좌석 생성 요청 정보
    * @return 생성된 예매 좌석 응답 목록
    */
+  @Operation(summary = "예매 좌석 생성", description = "특정 상품에 대한 예매 좌석 정보들을 일괄 생성합니다.")
   @PostMapping("/api/v1/reservation-seats")
   public ApiResponse<List<ReservationSeatResponse>> create(
       @RequestBody ReservationSeatsCreateRequest createRequest) {
@@ -60,6 +62,7 @@ public class ReservationSeatApi {
    * @param productId 상품 ID
    * @return 예매 좌석 응답 목록
    */
+  @Operation(summary = "상품의 예매 좌석 목록 조회", description = "특정 상품에 등록된 모든 예매 좌석을 조회합니다.")
   @GetMapping("/api/v1/products/{productId}/reservation-seats")
   public ApiResponse<List<ReservationSeatResponse>> findAllByProductId(
       @PathVariable Long productId) {
@@ -78,6 +81,7 @@ public class ReservationSeatApi {
    *
    * @param updateRequest 예매 좌석 정보 수정 요청 정보
    */
+  @Operation(summary = "예매 좌석 정보 수정", description = "가격, 등급 등 예매 좌석 정보 변경을 처리합니다.")
   @PutMapping("/api/v1/reservation-seats")
   public ApiResponse<Void> update(@RequestBody ReservationSeatInfosUpdateRequest updateRequest) {
     reservationSeatManager.updateReservationSeatInfo(updateRequest);
@@ -92,6 +96,7 @@ public class ReservationSeatApi {
    *
    * @param reservationSeatId 예매 좌석 ID
    */
+  @Operation(summary = "예매 좌석 선점", description = "예매 좌석을 일시적으로 선점합니다(최종 결제 전 임시 상태).")
   @PostMapping("/api/v1/reservation-seats/{reservationSeatId}/preempt")
   public ApiResponse<Void> preempt(@PathVariable Long reservationSeatId) {
     reservationSeatManager.preempt(reservationSeatId);
@@ -106,6 +111,7 @@ public class ReservationSeatApi {
    *
    * @param reservationSeatId 예매 좌석 ID
    */
+  @Operation(summary = "예매 좌석 예약 확정", description = "예매 선점 상태의 좌석을 최종 예약으로 확정합니다.")
   @PostMapping("/api/v1/reservation-seats/{reservationSeatId}/reserve")
   public ApiResponse<Void> reserve(@PathVariable Long reservationSeatId) {
     reservationSeatManager.reserve(reservationSeatId);
@@ -120,6 +126,7 @@ public class ReservationSeatApi {
    *
    * @param reservationSeatId 예매 좌석 ID
    */
+  @Operation(summary = "예매 좌석 예약 취소", description = "예매 예약 또는 선점 상태의 좌석을 취소합니다.")
   @PostMapping("/api/v1/reservation-seats/{reservationSeatId}/cancel")
   public ApiResponse<Void> cancel(@PathVariable Long reservationSeatId) {
     reservationSeatManager.cancel(reservationSeatId);
