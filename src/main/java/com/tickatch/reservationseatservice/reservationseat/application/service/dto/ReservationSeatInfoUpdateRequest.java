@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record ReservationSeatInfoUpdateRequest(
     @NotNull Long reservationSeatId, @NotBlank String grade, @NotNull @Min(0) Long price) {
+
   public SeatInfoUpdateRequest toUpdateRequest() {
     return new SeatInfoUpdateRequest(grade, price);
   }

@@ -11,5 +11,5 @@ public interface ReservationSeatRepository extends Repository<ReservationSeat, L
 
   Optional<ReservationSeat> findById(Long id);
 
-  List<ReservationSeat> findAllById(List<Long> productId);
+  List<ReservationSeat> findAllByIdIn(List<Long> ids);
 }

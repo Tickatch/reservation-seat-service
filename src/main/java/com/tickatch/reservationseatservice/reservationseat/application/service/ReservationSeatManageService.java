@@ -23,7 +23,7 @@ public class ReservationSeatManageService implements ReservationSeatManager {
     List<Long> reservationSeatIds = updateRequest.getReservationSeatIds();
 
     List<ReservationSeat> reservationSeats =
-        reservationSeatRepository.findAllById(reservationSeatIds);
+        reservationSeatRepository.findAllByIdIn(reservationSeatIds);
     Map<Long, ReservationSeat> reservationSeatMap =
         reservationSeats.stream()
             .collect(Collectors.toMap(ReservationSeat::getId, Function.identity()));
