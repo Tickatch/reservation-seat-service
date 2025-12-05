@@ -10,4 +10,6 @@ public interface ReservationSeatRepository extends Repository<ReservationSeat, L
   <S extends ReservationSeat> List<S> saveAll(Iterable<S> reservationSeats);
 
   Optional<ReservationSeat> findById(Long id);
+
+  List<ReservationSeat> findAllByIdIn(List<Long> ids);
 }

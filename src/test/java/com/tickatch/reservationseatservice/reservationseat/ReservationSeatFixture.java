@@ -1,9 +1,12 @@
 package com.tickatch.reservationseatservice.reservationseat;
 
 import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatCreateInfo;
+import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatInfoUpdateRequest;
+import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatInfosUpdateRequest;
 import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatsCreateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import com.tickatch.reservationseatservice.reservationseat.domain.dto.ReservationSeatCreateRequest;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import org.apache.commons.lang.math.RandomUtils;
@@ -19,20 +22,12 @@ public class ReservationSeatFixture {
     return new ReservationSeatsCreateRequest(UUID.randomUUID(), List.of(seat1, seat2, seat3));
   }
 
-  public static ReservationSeat createReservationSeat(ReservationSeatCreateRequest request) {
+  public static ReservationSeat createMockReservationSeat(ReservationSeatCreateRequest request) {
     ReservationSeat seat = ReservationSeat.create(request);
 
     ReflectionTestUtils.setField(seat, "id", RandomUtils.nextLong());
 
     return ReservationSeat.create(request);
-  }
-
-  public static ReservationSeat createReservationSeat() {
-    ReservationSeat seat = ReservationSeat.create(createReservationSeatCreateRequest());
-
-    ReflectionTestUtils.setField(seat, "id", RandomUtils.nextLong());
-
-    return seat;
   }
 
   public static ReservationSeatCreateRequest createReservationSeatCreateRequest(
@@ -42,5 +37,29 @@ public class ReservationSeatFixture {
 
   public static ReservationSeatCreateRequest createReservationSeatCreateRequest() {
     return createReservationSeatCreateRequest(UUID.randomUUID(), "A1", "S석", 10000L);
+  }
+
+  public static ReservationSeatInfoUpdateRequest createReservationSeatInfoUpdateRequest(
+      Long reservationSeatId, String grade, Long price) {
+    return new ReservationSeatInfoUpdateRequest(reservationSeatId, grade, price);
+  }
+
+  public static ReservationSeatInfoUpdateRequest createReservationSeatInfoUpdateRequest(
+      Long reservationSeatId) {
+    return createReservationSeatInfoUpdateRequest(reservationSeatId, "VIP석", 20000L);
+  }
+
+  public static ReservationSeatInfosUpdateRequest createReservationSeatInfosUpdateRequest(
+      List<ReservationSeatInfoUpdateRequest> updateInfos) {
+    return new ReservationSeatInfosUpdateRequest(updateInfos);
+  }
+
+  public static ReservationSeatInfosUpdateRequest createReservationSeatInfosUpdateRequest(
+      Long... reservationSeatIds) {
+    List<ReservationSeatInfoUpdateRequest> updateInfos =
+        Arrays.stream(reservationSeatIds)
+            .map(ReservationSeatFixture::createReservationSeatInfoUpdateRequest)
+            .toList();
+    return new ReservationSeatInfosUpdateRequest(updateInfos);
   }
 }

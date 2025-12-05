@@ -1,6 +1,6 @@
 package com.tickatch.reservationseatservice.reservationseat.domain;
 
-import static com.tickatch.reservationseatservice.reservationseat.ReservationSeatFixture.*;
+import static com.tickatch.reservationseatservice.reservationseat.ReservationSeatFixture.createReservationSeatCreateRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

@@ -1,20 +1,24 @@
 package com.tickatch.reservationseatservice.reservationseat.presentation;
 
+import static com.tickatch.reservationseatservice.AssertThatUtils.isTrue;
+import static com.tickatch.reservationseatservice.reservationseat.ReservationSeatFixture.createReservationSeatInfosUpdateRequest;
 import static com.tickatch.reservationseatservice.reservationseat.ReservationSeatFixture.createReservationSeatsCreateRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tickatch.reservationseatservice.reservationseat.ReservationSeatFixture;
 import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatCreator;
+import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatManager;
+import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatInfosUpdateRequest;
 import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatsCreateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import com.tickatch.reservationseatservice.reservationseat.presentation.api.dto.ReservationSeatResponse;
 import io.github.tickatch.common.security.test.MockUser;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,9 +34,11 @@ class ReservationSeatApiTest {
 
   @Autowired MockMvcTester mvcTester;
 
+  @Autowired ObjectMapper objectMapper;
+
   @MockitoBean ReservationSeatCreator reservationSeatCreator;
 
-  @Autowired ObjectMapper objectMapper;
+  @MockitoBean ReservationSeatManager reservationSeatManager;
 
   @Test
   @MockUser
@@ -41,7 +47,7 @@ class ReservationSeatApiTest {
 
     List<ReservationSeat> reservationSeats =
         request.toCreateRequests().stream()
-            .map(ReservationSeatFixture::createReservationSeat)
+            .map(ReservationSeatFixture::createMockReservationSeat)
             .toList();
 
     given(reservationSeatCreator.create(any(ReservationSeatsCreateRequest.class)))
@@ -63,8 +69,29 @@ class ReservationSeatApiTest {
     assertThat(result)
         .hasStatusOk()
         .bodyJson()
-        .hasPathSatisfying("$.success", s -> Assertions.assertThat(s).asBoolean().isTrue())
+        .hasPathSatisfying("$.success", isTrue())
         .extractingPath("$.data")
         .isEqualTo(objectMapper.readValue(expectedJson, List.class));
+  }
+
+  @Test
+  @MockUser
+  void updateReservationSeatInfo() throws JsonProcessingException {
+    doNothing()
+        .when(reservationSeatManager)
+        .updateReservationSeatInfo(any(ReservationSeatInfosUpdateRequest.class));
+
+    ReservationSeatInfosUpdateRequest request = createReservationSeatInfosUpdateRequest(1L, 2L, 3L);
+    String requestJson = objectMapper.writeValueAsString(request);
+
+    MvcTestResult result =
+        mvcTester
+            .put()
+            .uri("/api/v1/reservation-seats")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(requestJson)
+            .exchange();
+
+    assertThat(result).hasStatusOk().bodyJson().hasPathSatisfying("$.success", isTrue());
   }
 }
