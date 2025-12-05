@@ -76,12 +76,13 @@ public class ReservationSeat extends AbstractTimeEntity {
   }
 
   public boolean isReservable() {
-    return status.isAvaliable();
+    return status.isAvailable();
   }
 
   private void checkAvailability() {
     if (this.status.isUnavailable()) {
-      throw new ReservationSeatException(ReservationSeatErrorCode.SEAT_UNAVAILABLE);
+      throw new ReservationSeatException(
+          ReservationSeatErrorCode.RESERVATION_SEAT_UNAVAILABLE, this.id);
     }
   }
 

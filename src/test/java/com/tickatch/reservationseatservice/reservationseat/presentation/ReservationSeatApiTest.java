@@ -5,6 +5,7 @@ import static com.tickatch.reservationseatservice.reservationseat.ReservationSea
 import static com.tickatch.reservationseatservice.reservationseat.ReservationSeatFixture.createReservationSeatsCreateRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 
@@ -90,6 +91,48 @@ class ReservationSeatApiTest {
             .uri("/api/v1/reservation-seats")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestJson)
+            .exchange();
+
+    assertThat(result).hasStatusOk().bodyJson().hasPathSatisfying("$.success", isTrue());
+  }
+
+  @Test
+  @MockUser
+  void preempt() {
+    doNothing().when(reservationSeatManager).preempt(anyLong());
+
+    MvcTestResult result =
+        mvcTester
+            .post()
+            .uri("/api/v1/reservation-seats/{reservationSeatId}/preempt", 1L)
+            .exchange();
+
+    assertThat(result).hasStatusOk().bodyJson().hasPathSatisfying("$.success", isTrue());
+  }
+
+  @Test
+  @MockUser
+  void reserve() {
+    doNothing().when(reservationSeatManager).reserve(anyLong());
+
+    MvcTestResult result =
+        mvcTester
+            .post()
+            .uri("/api/v1/reservation-seats/{reservationSeatId}/preempt", 1L)
+            .exchange();
+
+    assertThat(result).hasStatusOk().bodyJson().hasPathSatisfying("$.success", isTrue());
+  }
+
+  @Test
+  @MockUser
+  void cancel() {
+    doNothing().when(reservationSeatManager).cancel(anyLong());
+
+    MvcTestResult result =
+        mvcTester
+            .post()
+            .uri("/api/v1/reservation-seats/{reservationSeatId}/preempt", 1L)
             .exchange();
 
     assertThat(result).hasStatusOk().bodyJson().hasPathSatisfying("$.success", isTrue());

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ReservationSeatManageService implements ReservationSeatManager {
 
+  private final ReservationSeatFinder reservationSeatFinder;
   private final ReservationSeatRepository reservationSeatRepository;
 
   @Override
@@ -37,5 +38,32 @@ public class ReservationSeatManageService implements ReservationSeatManager {
             });
 
     reservationSeatRepository.saveAll(reservationSeats);
+  }
+
+  @Override
+  public void preempt(Long reservationSeatId) {
+    ReservationSeat reservationSeat = reservationSeatFinder.findByIdWithLock(reservationSeatId);
+
+    reservationSeat.preempt();
+
+    reservationSeatRepository.save(reservationSeat);
+  }
+
+  @Override
+  public void reserve(Long reservationSeatId) {
+    ReservationSeat reservationSeat = reservationSeatFinder.findByIdWithLock(reservationSeatId);
+
+    reservationSeat.reserve();
+
+    reservationSeatRepository.save(reservationSeat);
+  }
+
+  @Override
+  public void cancel(Long reservationSeatId) {
+    ReservationSeat reservationSeat = reservationSeatFinder.findByIdWithLock(reservationSeatId);
+
+    reservationSeat.cancel();
+
+    reservationSeatRepository.save(reservationSeat);
   }
 }

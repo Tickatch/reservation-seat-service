@@ -9,6 +9,7 @@ import com.tickatch.reservationseatservice.reservationseat.presentation.api.dto.
 import io.github.tickatch.common.api.ApiResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +36,27 @@ public class ReservationSeatApi {
   @PutMapping("/api/v1/reservation-seats")
   public ApiResponse<Void> update(@RequestBody ReservationSeatInfosUpdateRequest updateRequest) {
     reservationSeatManager.updateReservationSeatInfo(updateRequest);
+
+    return ApiResponse.success();
+  }
+
+  @PostMapping("/api/v1/reservation-seats/{reservationSeatId}/preempt")
+  public ApiResponse<Void> preempt(@PathVariable Long reservationSeatId) {
+    reservationSeatManager.preempt(reservationSeatId);
+
+    return ApiResponse.success();
+  }
+
+  @PostMapping("/api/v1/reservation-seats/{reservationSeatId}/reserve")
+  public ApiResponse<Void> reserve(@PathVariable Long reservationSeatId) {
+    reservationSeatManager.reserve(reservationSeatId);
+
+    return ApiResponse.success();
+  }
+
+  @PostMapping("/api/v1/reservation-seats/{reservationSeatId}/cancel")
+  public ApiResponse<Void> cancel(@PathVariable Long reservationSeatId) {
+    reservationSeatManager.cancel(reservationSeatId);
 
     return ApiResponse.success();
   }

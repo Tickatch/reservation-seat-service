@@ -6,10 +6,10 @@ public enum ReservationSeatStatus {
   RESERVED;
 
   public boolean isUnavailable() {
-    return !isAvaliable();
+    return !isAvailable();
   }
 
-  public boolean isAvaliable() {
+  public boolean isAvailable() {
     return this == AVAILABLE;
   }
 }
