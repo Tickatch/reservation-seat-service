@@ -11,4 +11,6 @@ public interface ReservationSeatManager {
   void reserve(@Valid Long reservationSeatId);
 
   void cancel(@Valid Long reservationSeatId);
+
+  void delete(Long productId);
 }

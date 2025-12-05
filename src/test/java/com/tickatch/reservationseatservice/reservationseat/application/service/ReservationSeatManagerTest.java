@@ -111,6 +111,20 @@ class ReservationSeatManagerTest {
     assertThat(result.getStatus()).isEqualTo(ReservationSeatStatus.AVAILABLE);
   }
 
+  @Test
+  void delete() {
+    ReservationSeat reservationSeat = reservationSeats.getFirst();
+
+    reservationSeatManager.delete(reservationSeat.getProductId().id());
+    em.flush();
+    em.clear();
+
+    List<ReservationSeat> reservationSeats =
+        reservationSeatFinder.findAllBy(reservationSeat.getProductId().id());
+
+    assertThat(reservationSeats).isEmpty();
+  }
+
   private List<ReservationSeat> createReservationSeats() {
     var createRequest = ReservationSeatFixture.createReservationSeatsCreateRequest();
     List<ReservationSeat> seats = reservationSeatCreator.create(createRequest);
