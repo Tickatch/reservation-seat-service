@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -63,9 +64,9 @@ public class ReservationSeatApi {
    * @return 예매 좌석 응답 목록
    */
   @Operation(summary = "상품의 예매 좌석 목록 조회", description = "특정 상품에 등록된 모든 예매 좌석을 조회합니다.")
-  @GetMapping("/api/v1/products/{productId}/reservation-seats")
+  @GetMapping("/api/v1/reservation-seats")
   public ApiResponse<List<ReservationSeatResponse>> findAllByProductId(
-      @PathVariable Long productId) {
+      @RequestParam Long productId) {
     List<ReservationSeat> reservationSeats = reservationSeatFinder.findAllBy(productId);
 
     List<ReservationSeatResponse> response =
