@@ -3,7 +3,6 @@ package com.tickatch.reservationseatservice.reservationseat.domain.vo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.util.Objects;
-import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -15,18 +14,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductId {
   @Column(name = "product_id", nullable = false)
-  private UUID id;
+  private Long id;
 
-  public static ProductId of(UUID id) {
+  public static ProductId of(Long id) {
     return new ProductId(Objects.requireNonNull(id));
   }
 
-  public UUID toUuid() {
-    return id;
-  }
-
-  @Override
-  public String toString() {
-    return id.toString();
+  public Long id() {
+    return this.id;
   }
 }

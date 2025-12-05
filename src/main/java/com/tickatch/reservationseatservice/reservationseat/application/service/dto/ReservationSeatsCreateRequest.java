@@ -3,10 +3,9 @@ package com.tickatch.reservationseatservice.reservationseat.application.service.
 import com.tickatch.reservationseatservice.reservationseat.domain.dto.ReservationSeatCreateRequest;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
-import java.util.UUID;
 
 public record ReservationSeatsCreateRequest(
-    @NotNull UUID productId, @NotNull List<ReservationSeatCreateInfo> seatCreateInfos) {
+    @NotNull Long productId, @NotNull List<ReservationSeatCreateInfo> seatCreateInfos) {
 
   public ReservationSeatsCreateRequest {
     // 방어적 복사 + immutable list로 변환

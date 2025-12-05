@@ -1,5 +1,6 @@
 package com.tickatch.reservationseatservice.reservationseat.domain;
 
+import com.tickatch.reservationseatservice.reservationseat.domain.vo.ProductId;
 import jakarta.persistence.LockModeType;
 import java.util.List;
 import java.util.Optional;
@@ -19,4 +20,6 @@ public interface ReservationSeatRepository extends Repository<ReservationSeat, L
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query("SELECT rs FROM ReservationSeat rs WHERE rs.id = :id")
   Optional<ReservationSeat> findByIdWithLock(Long id);
+
+  List<ReservationSeat> findAllByProductId(ProductId productId);
 }

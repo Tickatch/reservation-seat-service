@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tickatch.reservationseatservice.reservationseat.ReservationSeatFixture;
 import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatCreator;
+import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatFinder;
 import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatManager;
 import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatInfosUpdateRequest;
 import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatsCreateRequest;
@@ -41,6 +42,8 @@ class ReservationSeatApiTest {
 
   @MockitoBean ReservationSeatManager reservationSeatManager;
 
+  @MockitoBean ReservationSeatFinder reservationSeatFinder;
+
   @Test
   @MockUser
   void create() throws JsonProcessingException {
@@ -65,6 +68,34 @@ class ReservationSeatApiTest {
             .uri("/api/v1/reservation-seats")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestJson)
+            .exchange();
+
+    assertThat(result)
+        .hasStatusOk()
+        .bodyJson()
+        .hasPathSatisfying("$.success", isTrue())
+        .extractingPath("$.data")
+        .isEqualTo(objectMapper.readValue(expectedJson, List.class));
+  }
+
+  @Test
+  @MockUser
+  void findAllByProductId() throws JsonProcessingException {
+    ReservationSeatsCreateRequest request = createReservationSeatsCreateRequest();
+    List<ReservationSeat> reservationSeats =
+        request.toCreateRequests().stream()
+            .map(ReservationSeatFixture::createMockReservationSeat)
+            .toList();
+    given(reservationSeatFinder.findAllBy(anyLong())).willReturn(reservationSeats);
+
+    List<ReservationSeatResponse> expectedResponses =
+        reservationSeats.stream().map(ReservationSeatResponse::from).toList();
+    String expectedJson = objectMapper.writeValueAsString(expectedResponses);
+
+    MvcTestResult result =
+        mvcTester
+            .get()
+            .uri("/api/v1/products/{productId}/reservation-seats", request.productId())
             .exchange();
 
     assertThat(result)
