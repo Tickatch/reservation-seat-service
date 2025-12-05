@@ -4,6 +4,14 @@ import io.github.tickatch.common.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+/**
+ * 예매 좌석 관련 오류 코드.
+ *
+ * <p>예매 좌석 처리 과정에서 발생할 수 있는 예외 상황을 정의한다.
+ *
+ * @author 김형섭
+ * @since 1.0.0
+ */
 @RequiredArgsConstructor
 public enum ReservationSeatErrorCode implements ErrorCode {
   RESERVATION_SEAT_UNAVAILABLE(HttpStatus.CONFLICT.value(), "RESERVATION_SEAT_UNAVAILABLE"),

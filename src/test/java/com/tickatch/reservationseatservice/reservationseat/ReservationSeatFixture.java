@@ -1,9 +1,9 @@
 package com.tickatch.reservationseatservice.reservationseat;
 
-import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatCreateInfo;
-import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatInfoUpdateRequest;
-import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatInfosUpdateRequest;
-import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatsCreateRequest;
+import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatCreateInfo;
+import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfoUpdateRequest;
+import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfosUpdateRequest;
+import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatsCreateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import com.tickatch.reservationseatservice.reservationseat.domain.dto.ReservationSeatCreateRequest;
 import java.util.Arrays;

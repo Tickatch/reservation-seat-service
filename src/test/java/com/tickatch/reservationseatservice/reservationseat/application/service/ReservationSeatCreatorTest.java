@@ -4,7 +4,7 @@ import static com.tickatch.reservationseatservice.reservationseat.ReservationSea
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.tickatch.reservationseatservice.PersistenceTest;
-import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatsCreateRequest;
+import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatsCreateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import jakarta.persistence.EntityManager;
 import java.util.List;

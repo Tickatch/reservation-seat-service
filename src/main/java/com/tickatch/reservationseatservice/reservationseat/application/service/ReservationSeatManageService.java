@@ -1,6 +1,6 @@
 package com.tickatch.reservationseatservice.reservationseat.application.service;
 
-import com.tickatch.reservationseatservice.reservationseat.application.service.dto.ReservationSeatInfosUpdateRequest;
+import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfosUpdateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeatRepository;
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.ProductId;
@@ -11,10 +11,12 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 @Transactional
 @RequiredArgsConstructor
 @Service
+@Validated
 public class ReservationSeatManageService implements ReservationSeatManager {
 
   private final ReservationSeatFinder reservationSeatFinder;
