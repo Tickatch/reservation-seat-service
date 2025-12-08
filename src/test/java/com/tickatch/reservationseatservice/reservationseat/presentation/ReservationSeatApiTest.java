@@ -66,7 +66,7 @@ class ReservationSeatApiTest {
     MvcTestResult result =
         mvcTester
             .post()
-            .uri("/api/v1/reservation-seats")
+            .uri("/api/v1/internal/reservation-seats")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestJson)
             .exchange();

@@ -46,7 +46,7 @@ public class ReservationSeatApi {
    * @return 생성된 예매 좌석 응답 목록
    */
   @Operation(summary = "예매 좌석 생성", description = "특정 상품에 대한 예매 좌석 정보들을 일괄 생성합니다.")
-  @PostMapping("/api/v1/reservation-seats")
+  @PostMapping("/api/v1/internal/reservation-seats")
   public ApiResponse<List<ReservationSeatResponse>> create(
       @RequestBody ReservationSeatsCreateRequest createRequest) {
     List<ReservationSeat> reservationSeats = reservationSeatCreator.create(createRequest);
