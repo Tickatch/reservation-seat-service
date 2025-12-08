@@ -1,16 +1,19 @@
 package com.tickatch.reservationseatservice.reservationseat.presentation.api;
 
+import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfosUpdateRequest;
+import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatsCreateRequest;
 import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatCreator;
 import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatFinder;
 import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatManager;
-import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfosUpdateRequest;
-import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatsCreateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import com.tickatch.reservationseatservice.reservationseat.presentation.dto.ReservationSeatResponse;
 import io.github.tickatch.common.api.ApiResponse;
+import io.github.tickatch.common.security.AuthenticatedUser;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -94,12 +97,15 @@ public class ReservationSeatApi {
    *
    * <p>예매 좌석을 선점 상태로 변경한다.
    *
+   * @param requestUser 인증된 사용자 정보
    * @param reservationSeatId 예매 좌석 ID
    */
   @Operation(summary = "예매 좌석 선점", description = "예매 좌석을 일시적으로 선점합니다(최종 결제 전 임시 상태).")
   @PostMapping("/api/v1/reservation-seats/{reservationSeatId}/preempt")
-  public ApiResponse<Void> preempt(@PathVariable Long reservationSeatId) {
-    reservationSeatManager.preempt(reservationSeatId);
+  public ApiResponse<Void> preempt(
+      @AuthenticationPrincipal AuthenticatedUser requestUser,
+      @PathVariable Long reservationSeatId) {
+    reservationSeatManager.preempt(reservationSeatId, UUID.fromString(requestUser.userId()));
 
     return ApiResponse.success();
   }
@@ -109,12 +115,15 @@ public class ReservationSeatApi {
    *
    * <p>선점된 예매 좌석을 예약 확정 상태로 변경한다.
    *
+   * @param requestUser 인증된 사용자 정보
    * @param reservationSeatId 예매 좌석 ID
    */
   @Operation(summary = "예매 좌석 예약 확정", description = "예매 선점 상태의 좌석을 최종 예약으로 확정합니다.")
   @PostMapping("/api/v1/reservation-seats/{reservationSeatId}/reserve")
-  public ApiResponse<Void> reserve(@PathVariable Long reservationSeatId) {
-    reservationSeatManager.reserve(reservationSeatId);
+  public ApiResponse<Void> reserve(
+      @AuthenticationPrincipal AuthenticatedUser requestUser,
+      @PathVariable Long reservationSeatId) {
+    reservationSeatManager.reserve(reservationSeatId, UUID.fromString(requestUser.userId()));
 
     return ApiResponse.success();
   }
@@ -124,12 +133,15 @@ public class ReservationSeatApi {
    *
    * <p>예매 좌석의 예약 상태를 취소하여 다시 사용 가능 상태로 변경한다.
    *
+   * @param requestUser 인증된 사용자 정보
    * @param reservationSeatId 예매 좌석 ID
    */
   @Operation(summary = "예매 좌석 예약 취소", description = "예매 예약 또는 선점 상태의 좌석을 취소합니다.")
   @PostMapping("/api/v1/reservation-seats/{reservationSeatId}/cancel")
-  public ApiResponse<Void> cancel(@PathVariable Long reservationSeatId) {
-    reservationSeatManager.cancel(reservationSeatId);
+  public ApiResponse<Void> cancel(
+      @AuthenticationPrincipal AuthenticatedUser requestUser,
+      @PathVariable Long reservationSeatId) {
+    reservationSeatManager.cancel(reservationSeatId, UUID.fromString(requestUser.userId()));
 
     return ApiResponse.success();
   }

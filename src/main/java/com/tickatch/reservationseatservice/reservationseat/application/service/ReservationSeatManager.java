@@ -3,6 +3,7 @@ package com.tickatch.reservationseatservice.reservationseat.application.service;
 import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfosUpdateRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import java.util.UUID;
 
 /**
  * 예매 좌석 관리 기능 제공 인터페이스.
@@ -29,8 +30,9 @@ public interface ReservationSeatManager {
    * <p>해당 예매 좌석을 사용자가 잠시 확보할 수 있도록 상태를 변경한다.
    *
    * @param reservationSeatId 예매 좌석 ID
+   * @param requestId 요청자 ID
    */
-  void preempt(@NotNull Long reservationSeatId);
+  void preempt(@NotNull Long reservationSeatId, @NotNull UUID requestId);
 
   /**
    * 예매 좌석 예약 확정.
@@ -38,8 +40,9 @@ public interface ReservationSeatManager {
    * <p>선점된 예매 좌석을 확정 상태로 변경한다.
    *
    * @param reservationSeatId 예매 좌석 ID
+   * @param requestId 요청자 ID
    */
-  void reserve(@NotNull Long reservationSeatId);
+  void reserve(@NotNull Long reservationSeatId, @NotNull UUID requestId);
 
   /**
    * 예매 좌석 예약 취소.
@@ -47,8 +50,9 @@ public interface ReservationSeatManager {
    * <p>예약 또는 선점 상태의 예매 좌석을 취소하여 다시 예약 가능 상태로 변경한다.
    *
    * @param reservationSeatId 예매 좌석 ID
+   * @param requestId 요청자 ID
    */
-  void cancel(@NotNull Long reservationSeatId);
+  void cancel(@NotNull Long reservationSeatId, @NotNull UUID requestId);
 
   /**
    * 상품별 예매 좌석 삭제.

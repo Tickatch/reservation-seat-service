@@ -22,6 +22,10 @@ public enum ReservationSeatStatus {
     return !isAvailable();
   }
 
+  public boolean isPreempt() {
+    return this == PREEMPT;
+  }
+
   /**
    * 예매 좌석이 사용 가능한 상태인지 여부를 반환한다.
    *

@@ -6,6 +6,7 @@ import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSea
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.ProductId;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -44,28 +45,28 @@ public class ReservationSeatManageService implements ReservationSeatManager {
   }
 
   @Override
-  public void preempt(Long reservationSeatId) {
+  public void preempt(Long reservationSeatId, UUID requestId) {
     ReservationSeat reservationSeat = reservationSeatFinder.findByIdWithLock(reservationSeatId);
 
-    reservationSeat.preempt();
+    reservationSeat.preempt(requestId);
 
     reservationSeatRepository.save(reservationSeat);
   }
 
   @Override
-  public void reserve(Long reservationSeatId) {
+  public void reserve(Long reservationSeatId, UUID requestId) {
     ReservationSeat reservationSeat = reservationSeatFinder.findByIdWithLock(reservationSeatId);
 
-    reservationSeat.reserve();
+    reservationSeat.reserve(requestId);
 
     reservationSeatRepository.save(reservationSeat);
   }
 
   @Override
-  public void cancel(Long reservationSeatId) {
+  public void cancel(Long reservationSeatId, UUID requestId) {
     ReservationSeat reservationSeat = reservationSeatFinder.findByIdWithLock(reservationSeatId);
 
-    reservationSeat.cancel();
+    reservationSeat.cancel(requestId);
 
     reservationSeatRepository.save(reservationSeat);
   }

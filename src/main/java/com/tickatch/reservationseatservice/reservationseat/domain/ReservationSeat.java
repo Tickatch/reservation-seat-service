@@ -1,5 +1,7 @@
 package com.tickatch.reservationseatservice.reservationseat.domain;
 
+import static org.springframework.util.Assert.*;
+
 import com.tickatch.reservationseatservice.global.domain.AbstractTimeEntity;
 import com.tickatch.reservationseatservice.reservationseat.domain.dto.ReservationSeatCreateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.dto.SeatInfoUpdateRequest;
@@ -7,6 +9,7 @@ import com.tickatch.reservationseatservice.reservationseat.domain.exception.Rese
 import com.tickatch.reservationseatservice.reservationseat.domain.exception.ReservationSeatException;
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.Price;
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.ProductId;
+import com.tickatch.reservationseatservice.reservationseat.domain.vo.ReserverId;
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.SeatInfo;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -17,6 +20,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Objects;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,6 +53,8 @@ public class ReservationSeat extends AbstractTimeEntity {
 
   @Enumerated(EnumType.STRING)
   private ReservationSeatStatus status;
+
+  @Embedded private ReserverId reserverId;
 
   /**
    * 예매 좌석 생성.
@@ -88,23 +94,27 @@ public class ReservationSeat extends AbstractTimeEntity {
    *
    * <p>사용자가 해당 좌석을 일정 시간 동안 점유할 수 있도록 상태를 <code>PREEMPT</code>로 변경한다. 이미 사용 불가 상태일 경우 예외가 발생한다.
    *
+   * @param requestId 요청자 ID
    * @throws ReservationSeatException 좌석이 예약 불가 상태일 때
    */
-  public void preempt() {
-    checkAvailability();
+  public void preempt(UUID requestId) {
+    canPreempt();
 
+    this.reserverId = ReserverId.of(requestId);
     this.status = ReservationSeatStatus.PREEMPT;
   }
 
   /**
    * 예매 좌석 예약 확정.
    *
-   * <p>선점된 예매 좌석을 실제 예약 상태인 <code>RESERVED</code>로 변경한다. 사용 불가 상태일 경우 예외가 발생한다.
+   * <p>선점된 예매 좌석을 실제 예약 상태인 <code>RESERVED</code>로 변경한다. 선점 상태가 아니거나 요청자가 예약자가 아닌 경우 예외가 발생한다.
    *
+   * @param requestId 요청자 ID
    * @throws ReservationSeatException 좌석이 예약 불가 상태일 때
+   * @throws IllegalArgumentException 요청자가 예약자가 아닌 경우
    */
-  public void reserve() {
-    checkAvailability();
+  public void reserve(UUID requestId) {
+    canReserve(requestId);
 
     this.status = ReservationSeatStatus.RESERVED;
   }
@@ -113,27 +123,61 @@ public class ReservationSeat extends AbstractTimeEntity {
    * 예매 좌석 예약 취소.
    *
    * <p>예약 또는 선점된 좌석을 <code>AVAILABLE</code> 상태로 되돌린다.
+   *
+   * @param requestId 요청자 ID
+   * @throws IllegalArgumentException 요청자가 예약자가 아닌 경우
    */
-  public void cancel() {
+  public void cancel(UUID requestId) {
+    canCancel(requestId);
+
+    this.reserverId = null;
     this.status = ReservationSeatStatus.AVAILABLE;
   }
 
   /**
-   * 좌석이 예약 가능한 상태인지 확인.
+   * 좌석이 선점 가능한 상태인지 확인.
    *
    * <p>해당 좌석이 <b>AVAILABLE</b> 상태인지 여부를 반환한다.
    *
    * @return 예약 가능 여부
    */
-  public boolean isReservable() {
+  public boolean isPreemptable() {
     return status.isAvailable();
   }
 
-  private void checkAvailability() {
+  private void canPreempt() {
     if (this.status.isUnavailable()) {
       throw new ReservationSeatException(
           ReservationSeatErrorCode.RESERVATION_SEAT_UNAVAILABLE, this.id);
     }
+  }
+
+  private void canReserve(UUID requestId) {
+    if (!this.status.isPreempt()) {
+      throw new ReservationSeatException(
+          ReservationSeatErrorCode.RESERVATION_SEAT_UNAVAILABLE, this.id);
+    }
+    checkRequestIdIsReserver(requestId);
+  }
+
+  private void canCancel(UUID requestId) {
+    if (this.status.isAvailable()) {
+      throw new ReservationSeatException(
+          ReservationSeatErrorCode.RESERVATION_SEAT_ALREADY_AVAILABLE, this.id);
+    }
+    checkRequestIdIsReserver(requestId);
+  }
+
+  private void checkRequestIdIsReserver(UUID requestId) {
+    isTrue(isReservedBy(requestId), "요청 권한이 없습니다.");
+  }
+
+  private boolean hasReserver() {
+    return this.reserverId != null;
+  }
+
+  private boolean isReservedBy(UUID requestId) {
+    return hasReserver() && this.reserverId.toUuid().equals(requestId);
   }
 
   @Override
