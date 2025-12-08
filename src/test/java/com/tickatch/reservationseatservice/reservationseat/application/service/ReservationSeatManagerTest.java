@@ -1,20 +1,27 @@
 package com.tickatch.reservationseatservice.reservationseat.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 
 import com.tickatch.reservationseatservice.PersistenceTest;
 import com.tickatch.reservationseatservice.reservationseat.ReservationSeatFixture;
+import com.tickatch.reservationseatservice.reservationseat.application.ReservationSeatEventPublisher;
 import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfoUpdateRequest;
 import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfosUpdateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeatRepository;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeatStatus;
+import com.tickatch.reservationseatservice.reservationseat.domain.dto.ReservationSeatCanceledEvent;
+import com.tickatch.reservationseatservice.reservationseat.domain.dto.ReservationSeatPreemptEvent;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @PersistenceTest
 class ReservationSeatManagerTest {
@@ -23,6 +30,7 @@ class ReservationSeatManagerTest {
   @Autowired ReservationSeatRepository reservationSeatRepository;
   @Autowired ReservationSeatCreator reservationSeatCreator;
   @Autowired ReservationSeatFinder reservationSeatFinder;
+  @MockitoBean ReservationSeatEventPublisher eventPublisher;
   @Autowired EntityManager em;
 
   private List<ReservationSeat> reservationSeats;
@@ -79,6 +87,7 @@ class ReservationSeatManagerTest {
   @Test
   void preempt() {
     ReservationSeat reservationSeat = reservationSeats.getFirst();
+    doNothing().when(eventPublisher).publishPreempt(any(ReservationSeatPreemptEvent.class));
 
     reservationSeatManager.preempt(reservationSeat.getId(), requestId);
     em.flush();
@@ -86,11 +95,13 @@ class ReservationSeatManagerTest {
 
     ReservationSeat result = reservationSeatFinder.findById(reservationSeat.getId());
     assertThat(result.getStatus()).isEqualTo(ReservationSeatStatus.PREEMPT);
+    verify(eventPublisher).publishPreempt(any(ReservationSeatPreemptEvent.class));
   }
 
   @Test
   void reserve() {
     ReservationSeat reservationSeat = reservationSeats.getFirst();
+    doNothing().when(eventPublisher).publishPreempt(any(ReservationSeatPreemptEvent.class));
     reservationSeatManager.preempt(reservationSeat.getId(), requestId);
 
     reservationSeatManager.reserve(reservationSeat.getId(), requestId);
@@ -104,6 +115,7 @@ class ReservationSeatManagerTest {
   @Test
   void cancel() {
     ReservationSeat reservationSeat = reservationSeats.getFirst();
+    doNothing().when(eventPublisher).publishCanceled(any(ReservationSeatCanceledEvent.class));
     reservationSeatManager.preempt(reservationSeat.getId(), requestId);
 
     reservationSeatManager.cancel(reservationSeat.getId(), requestId);
@@ -112,6 +124,7 @@ class ReservationSeatManagerTest {
 
     ReservationSeat result = reservationSeatFinder.findById(reservationSeat.getId());
     assertThat(result.getStatus()).isEqualTo(ReservationSeatStatus.AVAILABLE);
+    verify(eventPublisher).publishCanceled(any(ReservationSeatCanceledEvent.class));
   }
 
   @Test

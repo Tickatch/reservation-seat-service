@@ -31,4 +31,8 @@ public class ReservationSeatException extends BusinessException {
   public ReservationSeatException(ErrorCode errorCode, Object... errorArgs) {
     super(errorCode, errorArgs);
   }
+
+  public ReservationSeatException(ErrorCode errorCode, Throwable throwable) {
+    super(errorCode, throwable);
+  }
 }

@@ -1,8 +1,11 @@
 package com.tickatch.reservationseatservice.reservationseat.application.service;
 
+import com.tickatch.reservationseatservice.reservationseat.application.ReservationSeatEventPublisher;
 import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfosUpdateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeatRepository;
+import com.tickatch.reservationseatservice.reservationseat.domain.dto.ReservationSeatCanceledEvent;
+import com.tickatch.reservationseatservice.reservationseat.domain.dto.ReservationSeatPreemptEvent;
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.ProductId;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +25,7 @@ public class ReservationSeatManageService implements ReservationSeatManager {
 
   private final ReservationSeatFinder reservationSeatFinder;
   private final ReservationSeatRepository reservationSeatRepository;
+  private final ReservationSeatEventPublisher reservationSeatEventPublisher;
 
   @Override
   public void updateReservationSeatInfo(ReservationSeatInfosUpdateRequest updateRequest) {
@@ -51,6 +55,10 @@ public class ReservationSeatManageService implements ReservationSeatManager {
     reservationSeat.preempt(requestId);
 
     reservationSeatRepository.save(reservationSeat);
+
+    reservationSeatEventPublisher.publishPreempt(
+        new ReservationSeatPreemptEvent(
+            reservationSeat.getProductId().id(), reservationSeat.getSeatInfo().getGrade()));
   }
 
   @Override
@@ -69,6 +77,10 @@ public class ReservationSeatManageService implements ReservationSeatManager {
     reservationSeat.cancel(requestId);
 
     reservationSeatRepository.save(reservationSeat);
+
+    reservationSeatEventPublisher.publishCanceled(
+        new ReservationSeatCanceledEvent(
+            reservationSeat.getProductId().id(), reservationSeat.getSeatInfo().getGrade()));
   }
 
   @Override
