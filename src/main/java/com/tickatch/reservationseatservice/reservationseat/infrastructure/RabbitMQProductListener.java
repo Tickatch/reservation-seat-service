@@ -1,6 +1,8 @@
 package com.tickatch.reservationseatservice.reservationseat.infrastructure;
 
 import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatManager;
+import io.github.tickatch.common.event.EventContext;
+import io.github.tickatch.common.event.IntegrationEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -28,10 +30,17 @@ public class RabbitMQProductListener {
    *
    * @param request 예매 좌석 삭제를 위한 상품 정보 요청
    */
-  @RabbitListener(queues = "tickatch.product.cancelled.reservation-seat.queue")
-  public void deleteByProductRequest(ProductReservationSeatDeleteRequest request) {
-    log.info("상품 삭제 메세지 수신 - 상품[{}] 예매 좌석 삭제 시작", request.getProductId());
-    reservationSeatManager.delete(request.getProductId());
-    log.info("상품[{}] 예매 좌석 삭제 완료", request.getProductId());
+  @RabbitListener(queues = RabbitMQConfig.QUEUE_PRODUCT_CANCELLED_RESERVATION_SEAT)
+  public void deleteByProductRequest(IntegrationEvent request) {
+    EventContext.run(
+        request,
+        event -> {
+          ProductReservationSeatDeleteRequest payload =
+              event.getPayloadAs(ProductReservationSeatDeleteRequest.class);
+
+          log.info("상품 삭제 메세지 수신 - 상품[{}] 예매 좌석 삭제 시작", payload.getProductId());
+          reservationSeatManager.delete(payload.getProductId());
+          log.info("상품[{}] 예매 좌석 삭제 완료", payload.getProductId());
+        });
   }
 }

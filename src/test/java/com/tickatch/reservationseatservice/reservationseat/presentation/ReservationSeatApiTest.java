@@ -12,15 +12,16 @@ import static org.mockito.Mockito.doNothing;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tickatch.reservationseatservice.reservationseat.ReservationSeatFixture;
+import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfosUpdateRequest;
+import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatsCreateRequest;
 import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatCreator;
 import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatFinder;
 import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatManager;
-import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfosUpdateRequest;
-import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatsCreateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import com.tickatch.reservationseatservice.reservationseat.presentation.dto.ReservationSeatResponse;
 import io.github.tickatch.common.security.test.MockUser;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -65,7 +66,7 @@ class ReservationSeatApiTest {
     MvcTestResult result =
         mvcTester
             .post()
-            .uri("/api/v1/reservation-seats")
+            .uri("/api/v1/internal/reservation-seats")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestJson)
             .exchange();
@@ -128,9 +129,9 @@ class ReservationSeatApiTest {
   }
 
   @Test
-  @MockUser
+  @MockUser(userId = "00000000-0000-0000-0000-000000000000")
   void preempt() {
-    doNothing().when(reservationSeatManager).preempt(anyLong());
+    doNothing().when(reservationSeatManager).preempt(anyLong(), any(UUID.class));
 
     MvcTestResult result =
         mvcTester
@@ -142,9 +143,9 @@ class ReservationSeatApiTest {
   }
 
   @Test
-  @MockUser
+  @MockUser(userId = "00000000-0000-0000-0000-000000000000")
   void reserve() {
-    doNothing().when(reservationSeatManager).reserve(anyLong());
+    doNothing().when(reservationSeatManager).reserve(anyLong(), any(UUID.class));
 
     MvcTestResult result =
         mvcTester
@@ -156,9 +157,9 @@ class ReservationSeatApiTest {
   }
 
   @Test
-  @MockUser
+  @MockUser(userId = "00000000-0000-0000-0000-000000000000")
   void cancel() {
-    doNothing().when(reservationSeatManager).cancel(anyLong());
+    doNothing().when(reservationSeatManager).cancel(anyLong(), any(UUID.class));
 
     MvcTestResult result =
         mvcTester

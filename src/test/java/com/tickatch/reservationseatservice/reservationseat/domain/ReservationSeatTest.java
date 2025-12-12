@@ -9,13 +9,16 @@ import com.tickatch.reservationseatservice.reservationseat.domain.dto.SeatInfoUp
 import com.tickatch.reservationseatservice.reservationseat.domain.exception.ReservationSeatException;
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.Price;
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.ProductId;
+import com.tickatch.reservationseatservice.reservationseat.domain.vo.ReserverId;
 import com.tickatch.reservationseatservice.reservationseat.domain.vo.SeatInfo;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ReservationSeatTest {
 
   private ReservationSeat seat;
+  private UUID requestId = UUID.randomUUID();
 
   @BeforeEach
   void setUp() {
@@ -48,47 +51,74 @@ class ReservationSeatTest {
 
   @Test
   void preempt() {
-    seat.preempt();
+    seat.preempt(requestId);
 
     assertThat(seat.getStatus()).isEqualTo(ReservationSeatStatus.PREEMPT);
+    assertThat(seat.getReserverId()).isEqualTo(ReserverId.of(requestId));
   }
 
   @Test
   void preemptIfUnavailable() {
-    seat.preempt();
+    seat.preempt(requestId);
 
-    assertThatThrownBy(() -> seat.preempt()).isInstanceOf(ReservationSeatException.class);
+    assertThatThrownBy(() -> seat.preempt(requestId)).isInstanceOf(ReservationSeatException.class);
   }
 
   @Test
   void reserve() {
-    seat.reserve();
+    seat.preempt(requestId);
+
+    seat.reserve(requestId);
 
     assertThat(seat.getStatus()).isEqualTo(ReservationSeatStatus.RESERVED);
   }
 
   @Test
-  void reserveIfUnavailable() {
-    seat.preempt();
+  void reserveIfNotPreempt() {
+    assertThatThrownBy(() -> seat.reserve(requestId)).isInstanceOf(ReservationSeatException.class);
+  }
 
-    assertThatThrownBy(() -> seat.reserve()).isInstanceOf(ReservationSeatException.class);
+  @Test
+  void reserveIfNotReserver() {
+    seat.preempt(requestId);
+
+    assertThatThrownBy(() -> seat.reserve(UUID.randomUUID()))
+        .isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
   void cancel() {
-    seat.cancel();
+    seat.preempt(requestId);
+
+    seat.cancel(requestId);
 
     assertThat(seat.getStatus()).isEqualTo(ReservationSeatStatus.AVAILABLE);
   }
 
   @Test
-  void isReservable() {
-    assertThat(seat.isReservable()).isTrue();
+  void cancelIfUnavailable() {
+    assertThatThrownBy(() -> seat.cancel(requestId)).isInstanceOf(ReservationSeatException.class);
+  }
 
-    seat.reserve();
-    assertThat(seat.isReservable()).isFalse();
+  @Test
+  void cancelIfNotReserver() {
+    seat.preempt(requestId);
 
-    seat.cancel();
-    assertThat(seat.isReservable()).isTrue();
+    assertThatThrownBy(() -> seat.cancel(UUID.randomUUID()))
+        .isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  void isPreemptable() {
+    assertThat(seat.isPreemptable()).isTrue();
+
+    seat.preempt(requestId);
+    assertThat(seat.isPreemptable()).isFalse();
+
+    seat.reserve(requestId);
+    assertThat(seat.isPreemptable()).isFalse();
+
+    seat.cancel(requestId);
+    assertThat(seat.isPreemptable()).isTrue();
   }
 }

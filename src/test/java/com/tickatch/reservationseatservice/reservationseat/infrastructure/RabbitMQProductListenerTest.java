@@ -1,8 +1,10 @@
 package com.tickatch.reservationseatservice.reservationseat.infrastructure;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.tickatch.reservationseatservice.reservationseat.application.service.ReservationSeatManager;
+import io.github.tickatch.common.event.IntegrationEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,10 +18,20 @@ class RabbitMQProductListenerTest {
 
   @InjectMocks private RabbitMQProductListener rabbitMQProductListener;
 
+  @Mock private IntegrationEvent integrationEvent;
+
   @Test
   void deleteByProductRequest() {
-    rabbitMQProductListener.deleteByProductRequest(new ProductReservationSeatDeleteRequest(1L));
+    Long productId = 1L;
+    ProductReservationSeatDeleteRequest payload =
+        new ProductReservationSeatDeleteRequest(productId);
 
-    verify(reservationSeatManager).delete(1L);
+    when(integrationEvent.getPayloadAs(ProductReservationSeatDeleteRequest.class))
+        .thenReturn(payload);
+
+    rabbitMQProductListener.deleteByProductRequest(integrationEvent);
+
+    verify(integrationEvent).getPayloadAs(ProductReservationSeatDeleteRequest.class);
+    verify(reservationSeatManager).delete(productId);
   }
 }

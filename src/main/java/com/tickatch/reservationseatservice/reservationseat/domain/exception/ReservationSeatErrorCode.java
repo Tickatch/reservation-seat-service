@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ReservationSeatErrorCode implements ErrorCode {
   RESERVATION_SEAT_UNAVAILABLE(HttpStatus.CONFLICT.value(), "RESERVATION_SEAT_UNAVAILABLE"),
+  RESERVATION_SEAT_ALREADY_AVAILABLE(
+      HttpStatus.BAD_REQUEST.value(), "RESERVATION_SEAT_ALREADY_AVAILABLE"),
   RESERVATION_SEAT_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "RESERVATION_SEAT_NOT_FOUND"),
   ;
 

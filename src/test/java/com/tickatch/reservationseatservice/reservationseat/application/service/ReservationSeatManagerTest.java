@@ -11,6 +11,7 @@ import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSea
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeatStatus;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ class ReservationSeatManagerTest {
   @Autowired EntityManager em;
 
   private List<ReservationSeat> reservationSeats;
+  private UUID requestId = UUID.randomUUID();
 
   @BeforeEach
   void setUp() {
@@ -78,7 +80,7 @@ class ReservationSeatManagerTest {
   void preempt() {
     ReservationSeat reservationSeat = reservationSeats.getFirst();
 
-    reservationSeatManager.preempt(reservationSeat.getId());
+    reservationSeatManager.preempt(reservationSeat.getId(), requestId);
     em.flush();
     em.clear();
 
@@ -89,8 +91,9 @@ class ReservationSeatManagerTest {
   @Test
   void reserve() {
     ReservationSeat reservationSeat = reservationSeats.getFirst();
+    reservationSeatManager.preempt(reservationSeat.getId(), requestId);
 
-    reservationSeatManager.reserve(reservationSeat.getId());
+    reservationSeatManager.reserve(reservationSeat.getId(), requestId);
     em.flush();
     em.clear();
 
@@ -101,9 +104,9 @@ class ReservationSeatManagerTest {
   @Test
   void cancel() {
     ReservationSeat reservationSeat = reservationSeats.getFirst();
-    reservationSeatManager.preempt(reservationSeat.getId());
+    reservationSeatManager.preempt(reservationSeat.getId(), requestId);
 
-    reservationSeatManager.cancel(reservationSeat.getId());
+    reservationSeatManager.cancel(reservationSeat.getId(), requestId);
     em.flush();
     em.clear();
 
