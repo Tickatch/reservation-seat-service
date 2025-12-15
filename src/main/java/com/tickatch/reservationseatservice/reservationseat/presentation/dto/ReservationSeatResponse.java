@@ -11,7 +11,7 @@ import com.tickatch.reservationseatservice.reservationseat.domain.vo.SeatInfo;
  * @author 김형섭
  * @since 1.0.0
  */
-public record ReservationSeatResponse(Long id, String seatNumber, String grade, Long price) {
+public record ReservationSeatResponse(Long id, String seatNumber, String grade, Long price, String status) {
 
   /**
    * 예매 좌석 도메인 객체를 응답 객체로 변환한다.
@@ -25,6 +25,7 @@ public record ReservationSeatResponse(Long id, String seatNumber, String grade, 
         reservationSeat.getId(),
         seatInfo.getSeatNumber(),
         seatInfo.getGrade(),
-        seatInfo.getPrice().value());
+        seatInfo.getPrice().value(),
+        reservationSeat.getStatus().name());
   }
 }
