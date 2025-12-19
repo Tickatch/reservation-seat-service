@@ -96,7 +96,7 @@ class ReservationSeatApiTest {
     MvcTestResult result =
         mvcTester
             .get()
-            .uri("/api/v1/products/{productId}/reservation-seats", request.productId())
+            .uri("/api/v1/reservation-seats?productId=" + request.productId())
             .exchange();
 
     assertThat(result)
