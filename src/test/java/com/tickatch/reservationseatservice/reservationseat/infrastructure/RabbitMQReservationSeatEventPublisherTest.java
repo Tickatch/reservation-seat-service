@@ -41,13 +41,10 @@ class RabbitMQReservationSeatEventPublisherTest {
   @Test
   @DisplayName("예매 좌석 선점 이벤트를 성공적으로 발행한다")
   void publishPreempt_success() {
-    // given
     ReservationSeatPreemptEvent event = new ReservationSeatPreemptEvent(1L, "S석");
 
-    // when
     eventPublisher.publishPreempt(event);
 
-    // then
     verify(rabbitTemplate)
         .convertAndSend(eq(EXCHANGE), eq(event.getRoutingKey()), any(IntegrationEvent.class));
   }
@@ -55,13 +52,10 @@ class RabbitMQReservationSeatEventPublisherTest {
   @Test
   @DisplayName("예매 좌석 취소 이벤트를 성공적으로 발행한다")
   void publishCanceled_success() {
-    // given
     ReservationSeatCanceledEvent event = new ReservationSeatCanceledEvent(1L, "S석");
 
-    // when
     eventPublisher.publishCanceled(event);
 
-    // then
     verify(rabbitTemplate)
         .convertAndSend(eq(EXCHANGE), eq(event.getRoutingKey()), any(IntegrationEvent.class));
   }
@@ -69,14 +63,12 @@ class RabbitMQReservationSeatEventPublisherTest {
   @Test
   @DisplayName("이벤트 발행 실패 시 EventPublishException을 발생시킨다")
   void publishPreempt_fail_throwsException() {
-    // given
     ReservationSeatPreemptEvent event = new ReservationSeatPreemptEvent(1L, "S석");
 
     doThrow(new AmqpException("Connection failed"))
         .when(rabbitTemplate)
         .convertAndSend(anyString(), anyString(), any(Object.class));
 
-    // when & then
     assertThatThrownBy(() -> eventPublisher.publishPreempt(event))
         .isInstanceOf(ReservationSeatException.class)
         .hasCauseInstanceOf(AmqpException.class);
