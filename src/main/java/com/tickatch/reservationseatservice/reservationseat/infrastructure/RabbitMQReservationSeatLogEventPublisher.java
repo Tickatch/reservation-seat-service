@@ -23,7 +23,7 @@ public class RabbitMQReservationSeatLogEventPublisher implements ReservationSeat
 
   private final RabbitTemplate rabbitTemplate;
 
-  @Value("${messaging.exchange.reservation-seat:tickatch.reservation-seat}")
+  @Value("${messaging.log.exchange:tickatch.log}")
   private String reservationSeatExchange;
 
   @Override
