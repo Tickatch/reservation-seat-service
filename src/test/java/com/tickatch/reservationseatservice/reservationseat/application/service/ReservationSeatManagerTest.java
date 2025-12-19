@@ -1,13 +1,17 @@
 package com.tickatch.reservationseatservice.reservationseat.application.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
 import com.tickatch.reservationseatservice.PersistenceTest;
 import com.tickatch.reservationseatservice.reservationseat.ReservationSeatFixture;
 import com.tickatch.reservationseatservice.reservationseat.application.ReservationSeatEventPublisher;
+import com.tickatch.reservationseatservice.reservationseat.application.ReservationSeatLogEventPublisher;
 import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfoUpdateRequest;
 import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfosUpdateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
@@ -31,6 +35,7 @@ class ReservationSeatManagerTest {
   @Autowired ReservationSeatCreator reservationSeatCreator;
   @Autowired ReservationSeatFinder reservationSeatFinder;
   @MockitoBean ReservationSeatEventPublisher eventPublisher;
+  @MockitoBean ReservationSeatLogEventPublisher logEventPublisher;
   @Autowired EntityManager em;
 
   private List<ReservationSeat> reservationSeats;
@@ -96,6 +101,7 @@ class ReservationSeatManagerTest {
     ReservationSeat result = reservationSeatFinder.findById(reservationSeat.getId());
     assertThat(result.getStatus()).isEqualTo(ReservationSeatStatus.PREEMPT);
     verify(eventPublisher).publishPreempt(any(ReservationSeatPreemptEvent.class));
+    verify(logEventPublisher).publish(anyLong(), anyString(), eq("PREEMPT"));
   }
 
   @Test
@@ -110,6 +116,7 @@ class ReservationSeatManagerTest {
 
     ReservationSeat result = reservationSeatFinder.findById(reservationSeat.getId());
     assertThat(result.getStatus()).isEqualTo(ReservationSeatStatus.RESERVED);
+    verify(logEventPublisher).publish(anyLong(), anyString(), eq("RESERVE"));
   }
 
   @Test
@@ -125,6 +132,7 @@ class ReservationSeatManagerTest {
     ReservationSeat result = reservationSeatFinder.findById(reservationSeat.getId());
     assertThat(result.getStatus()).isEqualTo(ReservationSeatStatus.AVAILABLE);
     verify(eventPublisher).publishCanceled(any(ReservationSeatCanceledEvent.class));
+    verify(logEventPublisher).publish(anyLong(), anyString(), eq("CANCEL"));
   }
 
   @Test

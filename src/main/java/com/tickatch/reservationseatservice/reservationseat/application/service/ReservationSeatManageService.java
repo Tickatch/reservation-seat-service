@@ -1,6 +1,8 @@
 package com.tickatch.reservationseatservice.reservationseat.application.service;
 
+import com.tickatch.reservationseatservice.reservationseat.application.ReservationSeatActionType;
 import com.tickatch.reservationseatservice.reservationseat.application.ReservationSeatEventPublisher;
+import com.tickatch.reservationseatservice.reservationseat.application.ReservationSeatLogEventPublisher;
 import com.tickatch.reservationseatservice.reservationseat.application.dto.ReservationSeatInfosUpdateRequest;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeat;
 import com.tickatch.reservationseatservice.reservationseat.domain.ReservationSeatRepository;
@@ -26,6 +28,7 @@ public class ReservationSeatManageService implements ReservationSeatManager {
   private final ReservationSeatFinder reservationSeatFinder;
   private final ReservationSeatRepository reservationSeatRepository;
   private final ReservationSeatEventPublisher reservationSeatEventPublisher;
+  private final ReservationSeatLogEventPublisher reservationSeatLogEventPublisher;
 
   @Override
   public void updateReservationSeatInfo(ReservationSeatInfosUpdateRequest updateRequest) {
@@ -54,11 +57,16 @@ public class ReservationSeatManageService implements ReservationSeatManager {
 
     reservationSeat.preempt(requestId);
 
-    reservationSeatRepository.save(reservationSeat);
+    ReservationSeat saved = reservationSeatRepository.save(reservationSeat);
 
     reservationSeatEventPublisher.publishPreempt(
         new ReservationSeatPreemptEvent(
             reservationSeat.getProductId().id(), reservationSeat.getSeatInfo().getGrade()));
+
+    reservationSeatLogEventPublisher.publish(
+        saved.getId(),
+        saved.getSeatInfo().getSeatNumber(),
+        ReservationSeatActionType.PREEMPT.name());
   }
 
   @Override
@@ -67,7 +75,12 @@ public class ReservationSeatManageService implements ReservationSeatManager {
 
     reservationSeat.reserve(requestId);
 
-    reservationSeatRepository.save(reservationSeat);
+    ReservationSeat saved = reservationSeatRepository.save(reservationSeat);
+
+    reservationSeatLogEventPublisher.publish(
+        saved.getId(),
+        saved.getSeatInfo().getSeatNumber(),
+        ReservationSeatActionType.RESERVE.name());
   }
 
   @Override
@@ -76,11 +89,16 @@ public class ReservationSeatManageService implements ReservationSeatManager {
 
     reservationSeat.cancel(requestId);
 
-    reservationSeatRepository.save(reservationSeat);
+    ReservationSeat saved = reservationSeatRepository.save(reservationSeat);
 
     reservationSeatEventPublisher.publishCanceled(
         new ReservationSeatCanceledEvent(
             reservationSeat.getProductId().id(), reservationSeat.getSeatInfo().getGrade()));
+
+    reservationSeatLogEventPublisher.publish(
+        saved.getId(),
+        saved.getSeatInfo().getSeatNumber(),
+        ReservationSeatActionType.CANCEL.name());
   }
 
   @Override
